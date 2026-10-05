@@ -142,6 +142,5 @@ module.exports = {
     getByName,
     getByType,
     getByNumber,
-    addUser,
     getNotFound,
 };

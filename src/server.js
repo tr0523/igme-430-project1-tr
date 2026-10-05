@@ -9,12 +9,6 @@ var pokedex = JSON.parse(pokedexString);
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 
-/*
-const bodyString = Buffer.concat(body).toString();
-        const type = request.headers['content-type'];
-        request.body = JSON.parse(bodyString);
-*/
-
 const onRequest = (request, response) => {
     console.log(request.url);
 
