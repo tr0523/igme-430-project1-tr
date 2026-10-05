@@ -1,0 +1,22 @@
+{
+  "name": "igme-430-project1-tr",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/tr0523/igme-430-project1-tr#readme",
+  "bugs": {
+    "url": "https://github.com/tr0523/igme-430-project1-tr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tr0523/igme-430-project1-tr.git"
+  },
+  "license": "ISC",
+  "author": "Taryn Ryden",
+  "type": "commonjs",
+  "main": "eslint.config.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests Complete\""
+  }
+}
