@@ -17,7 +17,7 @@ const respondJSON = (request, response, status, object) => {
 
     response.writeHead(status, headers);
 
-    //Code snippet is found on the reference guide for HEAD Requests
+    //Code fragment is found on the reference guide for HEAD Requests
     //Specifically at https://github.com/IGM-RichMedia-at-RIT/igme-430-shared/blob/main/reference/http/head-requests.md
     if(request.method !== 'HEAD'){
         response.write(content);

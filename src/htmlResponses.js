@@ -3,6 +3,7 @@ const fs = require('fs');
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const documentation = fs.readFileSync(`${__dirname}/../client/documentation.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
+const docsCSS = fs.readFileSync(`${__dirname}/../client/docStyle.css`);
 
 //Gets the main testing page
 const getIndex = (request, response) => {
@@ -18,10 +19,17 @@ const getDocumentation = (request, response) => {
     response.end();
 };
 
-//Gets the CSS
+//Gets the CSS of the main page
 const getCSS = (request, response) => {
     response.writeHead(200, {'Content-Type': 'text/css'});
     response.write(css);
+    response.end();
+};
+
+//Gets the CSS of the documentation page
+const getDocsCSS = (request, response) => {
+    response.writeHead(200, {'Content-Type': 'text/css'});
+    response.write(docsCSS);
     response.end();
 };
 
@@ -29,3 +37,4 @@ const getCSS = (request, response) => {
 module.exports.getIndex = getIndex;
 module.exports.getDocumentation = getDocumentation;
 module.exports.getCSS = getCSS;
+module.exports.getDocsCSS = getDocsCSS;

@@ -65,6 +65,9 @@ const onRequest = (request, response) => {
         case '/style.css':
             htmlHandler.getCSS(request, response);
             break;
+        case '/docStyle.css':
+            htmlHandler.getDocsCSS(request, response);
+            break;
         case '/getByName':
             jsonHandler.getByName(request, response);
             break;
