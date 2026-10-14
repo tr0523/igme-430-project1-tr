@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pokemon API Client Page</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  
+  <script>
+
+  </script>
+</head>
+<body>
+  <section id="top">
+    <h1>Documentation</h1>
+    <h2>/getByName</h2>
+    <h3>Relative URL:</h3>
+    <p>/getByName</p>
+    <h3>Supported Methods:</h3>
+    <p>Get, Partially Head</p>
+    <h3>QueryParams:</h3>
+    <p>name (string, required, the name of the pokemon)</p>
+    <h3>Returns:</h3>
+    <p>a JSON pokemon object</p>
+    <p>(Format: {id:number,num:string,name:string,img:string,type:[string],height:string,weight:string,weaknesses:[string],"next_evolution":[{num:string,name:string}]})</p>
+    <h3>Example:</h3>
+    <p>Request: /getByName?name=Bulbasaur</p>
+    <p>Result: {"id":1,"num":"001","name":"Bulbasaur","img":"http://www.serebii.net/pokemongo/pokemon/001.png","type":["Grass","Poison"],"height":"0.71 m","weight":"6.9 kg","weaknesses":["Fire","Ice","Flying","Psychic"],"next_evolution":[{"num":"002","name":"Ivysaur"},{"num":"003","name":"Venusaur"}]}</p>
+    <br></br>
+
+    <h1>Documentation</h1>
+    <h2>/getByType</h2>
+    <h3>Relative URL:</h3>
+    <p>/getByType</p>
+    <h3>Supported Methods:</h3>
+    <p>Get, Partially Head</p>
+    <h3>QueryParams:</h3>
+    <p>type (string, required, the type you are looking for)</p>
+    <h3>Returns:</h3>
+    <p>A JSON array of pokemon object</p>
+    <p>(Format: [{id:number,num:string,name:string,img:string,type:[string],height:string,weight:string,weaknesses:[string],"next_evolution":[{num:string,name:string}]}])</p>
+    <h3>Example:</h3>
+    <p>Request: /getByType?type=Ghost</p>
+    <p>Result: {"0":{"id":92,"num":"092","name":"Gastly","img":"http://www.serebii.net/pokemongo/pokemon/092.png","type":["Ghost","Poison"],"height":"1.30 m","weight":"0.1 kg","weaknesses":["Ground","Psychic","Ghost","Dark"],"next_evolution":[{"num":"093","name":"Haunter"},{"num":"094","name":"Gengar"}]},"1":{"id":93,"num":"093","name":"Haunter","img":"http://www.serebii.net/pokemongo/pokemon/093.png","type":["Ghost","Poison"],"height":"1.60 m","weight":"0.1 kg","weaknesses":["Ground","Psychic","Ghost","Dark"],"next_evolution":[{"num":"094","name":"Gengar"}]},"2":{"id":94,"num":"094","name":"Gengar","img":"http://www.serebii.net/pokemongo/pokemon/094.png","type":["Ghost","Poison"],"height":"1.50 m","weight":"40.5 kg","weaknesses":["Ground","Psychic","Ghost","Dark"]}}</p>
+    <br></br>
+    
+    <h1>Documentation</h1>
+    <h2>/getByNumber</h2>
+    <h3>Relative URL:</h3>
+    <p>/getByNumber</p>
+    <h3>Supported Methods:</h3>
+    <p>Get, Partially Head</p>
+    <h3>QueryParams:</h3>
+    <p>number (number, required, the id number of the pokemon)</p>
+    <h3>Returns:</h3>
+    <p>a JSON pokemon object</p>
+    <p>(Format: {id:number,num:string,name:string,img:string,type:[string],height:string,weight:string,weaknesses:[string],"next_evolution":[{num:string,name:string}]})</p>
+    <h3>Example:</h3>
+    <p>Request: /getByNumber?number=7</p>
+    <p>Result: {"id":7,"num":"007","name":"Squirtle","img":"http://www.serebii.net/pokemongo/pokemon/007.png","type":["Water"],"height":"0.51 m","weight":"9.0 kg","weaknesses":["Electric","Grass"],"next_evolution":[{"num":"008","name":"Wartortle"},{"num":"009","name":"Blastoise"}]}</p>
+    <br></br>
+    
+    <h1>Documentation</h1>
+    <h2>/getByWeakness</h2>
+    <h3>Relative URL:</h3>
+    <p>/getByWeakness</p>
+    <h3>Supported Methods:</h3>
+    <p>Get, Partially Head</p>
+    <h3>QueryParams:</h3>
+    <p>type (string, required, the type you are looking for pokemon with a weakness of)</p>
+    <h3>Returns:</h3>
+    <p>A JSON array of pokemon object</p>
+    <p>(Format: [{id:number,num:string,name:string,img:string,type:[string],height:string,weight:string,weaknesses:[string],"next_evolution":[{num:string,name:string}]}])</p>
+    <h3>Example:</h3>
+    <p>Request: /getByWeakness?weakness=Poison</p>
+    <p>Result: {"correctPokemon":{"0":{"id":46,"num":"046","name":"Paras","img":"http://www.serebii.net/pokemongo/pokemon/046.png","type":["Bug","Grass"],"height":"0.30 m","weight":"5.4 kg","weaknesses":["Fire","Ice","Poison","Flying","Bug","Rock"],"next_evolution":[{"num":"047","name":"Parasect"}]},"1":{"id":47,"num":"047","name":"Parasect","img":"http://www.serebii.net/pokemongo/pokemon/047.png","type":["Bug","Grass"],"height":"0.99 m","weight":"29.5 kg","weaknesses":["Fire","Ice","Poison","Flying","Bug","Rock"]},"2":{"id":102,"num":"102","name":"Exeggcute","img":"http://www.serebii.net/pokemongo/pokemon/102.png","type":["Grass","Psychic"],"height":"0.41 m","weight":"2.5 kg","weaknesses":["Fire","Ice","Poison","Flying","Bug","Ghost","Dark"],"next_evolution":[{"num":"103","name":"Exeggutor"}]},"3":{"id":103,"num":"103","name":"Exeggutor","img":"http://www.serebii.net/pokemongo/pokemon/103.png","type":["Grass","Psychic"],"height":"2.01 m","weight":"120.0 kg","weaknesses":["Fire","Ice","Poison","Flying","Bug","Ghost","Dark"]},"4":{"id":114,"num":"114","name":"Tangela","img":"http://www.serebii.net/pokemongo/pokemon/114.png","type":["Grass"],"height":"0.99 m","weight":"35.0 kg","weaknesses":["Fire","Ice","Poison","Flying","Bug"]}}}</p>
+    <br></br>
+    
+    <h1>Documentation</h1>
+    <h2>/updateHeight</h2>
+    <h3>Relative URL:</h3>
+    <p>/updateHeight</p>
+    <h3>Supported Methods:</h3>
+    <p>Post</p>
+    <h3>BodyParams:</h3>
+    <p>inputField (number, required, the id number of the pokemon)</p>
+    <p>newInfo (string, required, the new height of the pokemon)</p>
+    <h3>Returns:</h3>
+    <p>a JSON pokemon object</p>
+    <p>(Format: {id:number,num:string,name:string,img:string,type:[string],height:string,weight:string,weaknesses:[string],"next_evolution":[{num:string,name:string}]})</p>
+    <h3>Example:</h3>
+    <p>Request: /updateHeight?number=4</p>
+    <p>Body: {inputField: 4, newInfo: '1000'}</p>
+    <p>Result: {"id":4,"num":"004","name":"Charmander","img":"http://www.serebii.net/pokemongo/pokemon/004.png","type":["Fire"],"height":"1000","weight":"8.5 kg","weaknesses":["Water","Ground","Rock"],"next_evolution":[{"num":"005","name":"Charmeleon"},{"num":"006","name":"Charizard"}]}</p>
+    <br></br>
+    
+    <h1>Documentation</h1>
+    <h2>/updateWeight</h2>
+    <h3>Relative URL:</h3>
+    <p>/updateWeight</p>
+    <h3>Supported Methods:</h3>
+    <p>Post</p>
+    <h3>BodyParams:</h3>
+    <p>inputField (number, required, the id number of the pokemon)</p>
+    <p>newInfo (string, required, the new weight of the pokemon)</p>
+    <h3>Returns:</h3>
+    <p>a JSON pokemon object</p>
+    <p>(Format: {id:number,num:string,name:string,img:string,type:[string],height:string,weight:string,weaknesses:[string],"next_evolution":[{num:string,name:string}]})</p>
+    <h3>Example:</h3>
+    <p>Request: /updateWeight</p>
+    <p>Body: {inputField: 4, newInfo: '1000'}</p>
+    <p>Result: {"id":25,"num":"025","name":"Pikachu","img":"http://www.serebii.net/pokemongo/pokemon/025.png","type":["Electric"],"height":"0.41 m","weight":"500","weaknesses":["Ground"],"next_evolution":[{"num":"026","name":"Raichu"}]}</p>
+    <br></br>
+    
+  </section>
+  <section id="content">
+  </section>
+</body>
+</html>

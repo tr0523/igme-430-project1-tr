@@ -1,9 +1,13 @@
 const pokedexSource = require('./pokedex.json');
 
+//Sets up the pokedex data for the entire runtime
 const pokedexString = JSON.stringify(pokedexSource);
 const pokedex = JSON.parse(pokedexString);
 
-const respondJSON = (request, response, status, object, justHead = false) => {
+//Writes the JSON response, leaving out the body if it is in response to a HEAD request
+//status is the status code
+//object is the body of the response
+const respondJSON = (request, response, status, object) => {
     const content = JSON.stringify(object);
 
     const headers = {
@@ -13,38 +17,43 @@ const respondJSON = (request, response, status, object, justHead = false) => {
 
     response.writeHead(status, headers);
 
-    if(!justHead){
+    //Code snippet is found on the reference guide for HEAD Requests
+    //Specifically at https://github.com/IGM-RichMedia-at-RIT/igme-430-shared/blob/main/reference/http/head-requests.md
+    if(request.method !== 'HEAD'){
         response.write(content);
     }
+
     response.end();
 };
 
-const getByName = (request, response, name) => {
+//Retrieves a pokemon based on the name input
+const getByName = (request, response) => {
     correctID = -1;
+    currentStatus = 204;
+    responseJSON = {
+        message: 'Pokemon not found by that name in API',
+        id: 'noResults',
+    };
+    
     pokedex.forEach(pokemon => {
-        if(pokemon.name == name){
-            const responseJSON = {
-                pokemon
-            };   
-            return respondJSON(request, response, 200, responseJSON);
+        if(pokemon.name == request.query.name){
+            responseJSON = pokemon;   
+            currentStatus = 200;
         }
     });
 
-    const responseJSON = {
-        message: 'Pokemon not found by that name in API',
-    };
-
-    return respondJSON(request, response, 204, responseJSON);
+    return respondJSON(request, response, currentStatus, responseJSON);
     
 };
 
-const getByType = (request, response, searchType) => {
+//Retrieves the pokemon with the type input
+const getByType = (request, response) => {
     correctPokemon = {};
     correctNum = 0
 
     pokedex.forEach(pokemon => {
         pokemon.type.forEach(type => {
-            if(type == searchType){
+            if(type == request.query.type){
                 correctPokemon[correctNum] = pokemon;
                 correctNum++;
             }
@@ -54,57 +63,53 @@ const getByType = (request, response, searchType) => {
     if(correctNum == 0){
         const responseJSON = {
             message: 'Pokemon not found by that type in API',
+            id: 'noResults',
         };
         return respondJSON(request, response, 204, responseJSON);
     }
     else{
+        const responseJSON = correctPokemon;
+        return respondJSON(request, response, 200, responseJSON);
+    }
+    
+};
+
+//Retrieves a pokemon based on the number input
+const getByNumber = (request, response) => {
+    if(!pokedex[request.query.number-1]){
         const responseJSON = {
-            correctPokemon,
+            message: 'Pokemon not found by that number in API',
+            id: 'noResults',
         };
-        return respondJSON(request, response, 200, responseJSON);
+
+        return respondJSON(request, response, 204, responseJSON);
     }
-    
+    else{
+
+    pokemon = pokedex[request.query.number-1];
+    const responseJSON = pokemon;   
+    return respondJSON(request, response, 200, responseJSON);
+    }
 };
 
-const getByNumber = (request, response, number) => {
-    if(pokedex[number-1]){
-        pokemon = pokedex[number-1];
-        const responseJSON = {
-            pokemon
-        };   
-        return respondJSON(request, response, 200, responseJSON);
-    }
-
-    const responseJSON = {
-        message: 'Pokemon not found by that number in API',
-    };
-
-    return respondJSON(request, response, 204, responseJSON);
-    
-};
-
-const getByStage = (request, response, stage, onlyThreeStagers = false) => {
+//Retrieves the pokemon with the weakness input
+const getByWeakness = (request, response) => {
     correctPokemon = {};
     correctNum = 0
 
     pokedex.forEach(pokemon => {
-        
-        preEvos = 0;
-        pokedex.forEach(maybePreEvos => {
-            maybePreEvos.next_evolution.forEach(evoCheck => {
-            if(evoCheck.num = pokemon.num){
-                preEvos++;
+        pokemon.weaknesses.forEach(weakness => {
+            if(weakness == request.query.weakness){
+                correctPokemon[correctNum] = pokemon;
+                correctNum++;
             }
         })
-        }
-
-    )
-
     });
 
     if(correctNum == 0){
         const responseJSON = {
-            message: 'Pokemon not found by that type in API',
+            message: 'Pokemon not found with that weakness in API',
+            id: 'noResults',
         };
         return respondJSON(request, response, 204, responseJSON);
     }
@@ -117,9 +122,49 @@ const getByStage = (request, response, stage, onlyThreeStagers = false) => {
     
 };
 
+//Edits a pokemon's height to be the input height and retrieves that pokemon
+const updateHeight = (request, response) => {
+    const { inputField, newInfo } = request.body;
+    if(!pokedex[inputField-1]){
+        const responseJSON = {
+            message: 'Pokemon not found by that number in API',
+            id: 'noResults',
+        };
+        return respondJSON(request, response, 204, responseJSON);
+    }
+    else{
 
+    pokedex[inputField-1].height = newInfo;
+    pokemon = pokedex[inputField-1];
 
+    const responseJSON = pokemon;   
+    return respondJSON(request, response, 200, responseJSON);
+    }
+};
 
+//Edits a pokemon's weight to be the input weight and retrieves that pokemon
+const updateWeight = (request, response) => {
+    const { inputField, newInfo } = request.body;
+    if(!pokedex[inputField-1]){
+        const responseJSON = {
+            message: 'Pokemon not found by that number in API',
+            id: 'noResults',
+        };
+        return respondJSON(request, response, 204, responseJSON);
+    }
+    else{
+
+    pokedex[inputField-1].weight = newInfo;
+    pokemon = pokedex[inputField-1];
+
+    const responseJSON = pokemon;   
+    return respondJSON(request, response, 200, responseJSON);
+    }
+};
+
+//Returns an error for if not all parameters are input
+//Current assumption is that blank answers are input, and searches that do not yield results with content,
+//So they use 204 errors
 const userError = (request, response) => {
     const responseJSON = {
         message: 'Required parameters are missing',
@@ -129,6 +174,8 @@ const userError = (request, response) => {
     return respondJSON(request, response, 400, responseJSON);
 };
 
+
+//Returns if a nonexistent request is mmade
 const getNotFound = (request, response) => {
     const responseJSON = {
         message: 'The page you are looking for was not found.',
@@ -142,5 +189,8 @@ module.exports = {
     getByName,
     getByType,
     getByNumber,
+    getByWeakness,
+    updateHeight,
+    updateWeight,
     getNotFound,
 };

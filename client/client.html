@@ -5,9 +5,149 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
-    
 
+    //Handles the responses
+    //response is the response, parseResponse is a boolean for whether or not the body of the response will be parsed
+    //Shows the status, the response headers, and, if parseResponse is true, the body
+    const handleResponse = async (response, parseResponse) => {
+      
+      const content = document.querySelector('#content');
+      contentFound = true;
+
+      switch(response.status) {
+        case 200: 
+          content.innerHTML = `<b>Success</b>`;
+          break;
+        case 201:
+          content.innerHTML = `<b>Created</b>`;
+          break;
+        case 204:
+          content.innerHTML = `<b>No Results Found</b>`;
+          contentFound = false;
+          break;
+        case 400: 
+          content.innerHTML = `<b>Bad Request</b>`;
+          break;
+        case 404:
+          content.innerHTML = `<b>Resource Not Found</b>`;
+          break;
+        default: 
+          content.innerHTML = `Error code not implemented by client.`;
+          break;
+      }
+
+      content.innerHTML += `<p>Status:${response.status}</p>`;
+      content.innerHTML += `<p>Content-Length:${response.headers.get('Content-Length')}</p>`;
+
+      console.log(response);
+      if(parseResponse) {
+        console.log('literally what is happening');
+        const obj = await response.json();
+        const jsonString = JSON.stringify(obj);
+        console.log(jsonString);
+        content.innerHTML += `<p>${jsonString}</p>`;
+      } else {
+      }
+    };
+
+    //Runs the requests for the POST requests
+    //editForm is the form that is used to make the request
+    //url is the entire url, there are no query parameters
+    //inputField is the data directing the request to the right object
+    //newInfo is the info being added
+    //inputField and newInfo are both body parameters
+    const editAPI = async (editForm, url) => {
+      
+      const inputField = editForm.querySelector('#inputField').value;
+      const newInfo = editForm.querySelector('#newInfo').value;
+      
+      let response = await fetch(url, {
+        method: "post",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({inputField, newInfo})
+      });
+
+      handleResponse(response, true);
+    };
+    
+    //Runs the requests for the GET and HEAD requests
+    //searchForm is the form that is used to make the request
+    //urlStart is the start of the url, including the starts to the query parameters
+    //input is the data in the query parameters
+    //method is whether it is GET or HEAD
+    //url is the entire url
+    const searchRequest = async (searchForm, urlStart) => {
+      
+      const input = searchForm.querySelector('#inputField').value;
+      const method = searchForm.querySelector('#methodSelect').value;
+      const url = urlStart.concat(input);
+      console.log(url);
+      
+      let response = await fetch(url, {
+        method,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+      });
+
+      handleResponse(response, method === 'GET');
+    };
+
+    //Runs on initialization, sets up the buttons to activate the methods when clicked
     const init = () => {
+      const nameSearch = document.querySelector('#nameSearch');
+      const typeSearch = document.querySelector('#typeSearch');
+      const numberSearch = document.querySelector('#numberSearch');
+      const weaknessSearch = document.querySelector('#weaknessSearch');
+      const heightUpdate = document.querySelector('#heightUpdate');
+      const weightUpdate = document.querySelector('#weightUpdate');
+      
+      const getWithName = (e) => {
+        e.preventDefault();
+        searchRequest(nameSearch, '/getByName?name=');
+        return false;
+      }
+
+      const getWithType = (e) => {
+        e.preventDefault();
+        searchRequest(typeSearch, '/getByType?type=');
+        return false;
+      }
+
+      const getWithNumber = (e) => {
+        e.preventDefault();
+        searchRequest(numberSearch, '/getByNumber?number=');
+        return false;
+      }
+
+      const getWithWeakness = (e) => {
+        e.preventDefault();
+        searchRequest(weaknessSearch, '/getByWeakness?weakness=');
+        return false;
+      }
+
+      const editHeight = (e) => {
+        e.preventDefault();
+        editAPI(heightUpdate, '/updateHeight');
+        return false;
+      }
+
+      const editWeight = (e) => {
+        e.preventDefault();
+        editAPI(weightUpdate, '/updateWeight');
+        return false;
+      }
+      
+      nameSearch.addEventListener('submit', getWithName);
+      typeSearch.addEventListener('submit', getWithType);
+      numberSearch.addEventListener('submit', getWithNumber);
+      weaknessSearch.addEventListener('submit', getWithWeakness);
+      heightUpdate.addEventListener('submit',editHeight);
+      weightUpdate.addEventListener('submit',editWeight);
     };
 
     window.onload = init;
@@ -16,7 +156,109 @@
 </head>
 <body>
   <section id="top">
-    <h3>Work In Progress</h3>
+    <h2>Pokedex API</h2>
+    <h3>Search for a Pokemon by Name</h3>
+    <form id="nameSearch" action="/getByName" method="GET">
+      <label for="name">Pokemon Name: </label>
+      <input id="inputField" type="text" name="name" />
+      <select id="methodSelect">
+        <option value="GET">GET</option>
+        <option value="HEAD">HEAD</option>
+      </select>
+      <input type="submit" value="Search" />
+    </form>
+
+    <br></br>
+    <h3>Search for a Pokemon by Type</h3>
+    <form id="typeSearch" action="/getByType" method="GET">
+      <select id='inputField'>
+        <option value='Normal'>Normal</option>
+        <option value='Fighting'>Fighting</option>
+        <option value='Flying'>Flying</option>
+        <option value='Poison'>Poison</option>
+        <option value='Ground'>Ground</option>
+        <option value='Rock'>Rock</option>
+        <option value='Bug'>Bug</option>
+        <option value='Ghost'>Ghost</option>
+        <option value='Steel'>Steel</option>
+        <option value='Fire'>Fire</option>
+        <option value='Water'>Water</option>
+        <option value='Grass'>Grass</option>
+        <option value='Electric'>Electric</option>
+        <option value='Psychic'>Psychic</option>
+        <option value='Ice'>Ice</option>
+        <option value='Dragon'>Dragon</option>
+        <option value='Dark'>Dark</option>
+        <option value='Fairy'>Fairy</option>
+      </select>
+      <select id="methodSelect">
+        <option value="GET">GET</option>
+        <option value="HEAD">HEAD</option>
+      </select>
+      <input type="submit" value="Search" />
+    </form>
+    
+    <br></br>
+    <h3>Search for a Pokemon by Number</h3>
+    <form id="numberSearch" action="/getByNumber" method="get">
+      <label for="number">Pokedex Number: </label>
+      <input id="inputField" type="text" name="number"/>
+      <select id="methodSelect">
+        <option value="GET">GET</option>
+        <option value="HEAD">HEAD</option>
+      </select>
+      <input type="submit" value="Search" />
+    </form>
+    
+    <br></br>
+    <h3>Search for a Pokemon by Weakness</h3>
+    <form id="weaknessSearch" action="/getByWeakness" method="get">
+      <select id='inputField'>
+        <option value='Normal'>Normal</option>
+        <option value='Fighting'>Fighting</option>
+        <option value='Flying'>Flying</option>
+        <option value='Poison'>Poison</option>
+        <option value='Ground'>Ground</option>
+        <option value='Rock'>Rock</option>
+        <option value='Bug'>Bug</option>
+        <option value='Ghost'>Ghost</option>
+        <option value='Steel'>Steel</option>
+        <option value='Fire'>Fire</option>
+        <option value='Water'>Water</option>
+        <option value='Grass'>Grass</option>
+        <option value='Electric'>Electric</option>
+        <option value='Psychic'>Psychic</option>
+        <option value='Ice'>Ice</option>
+        <option value='Dragon'>Dragon</option>
+        <option value='Dark'>Dark</option>
+        <option value='Fairy'>Fairy</option>
+      </select>
+      <select id="methodSelect">
+        <option value="GET">GET</option>
+        <option value="HEAD">HEAD</option>
+      </select>
+      <input type="submit" value="Search" />
+    </form>
+    
+    <br></br>
+    <h3>Change the Height of a Pokemon</h3>
+    <form id="heightUpdate" action="/updateHeight" method="post">
+      <label for="number">Pokedex Number: </label>
+      <input id="inputField" type="text" name="number"/>
+      <label for="number">New Height: </label>
+      <input id="newInfo" type="text" name="height"/>
+      <input type="submit" value="Edit" />
+    </form>
+
+    <br></br>
+    <h3>Change the Weight of a Pokemon</h3>
+    <form id="weightUpdate" action="/updateWeight" method="post">
+      <label for="number">Pokedex Number: </label>
+      <input id="inputField" type="text" name="number"/>
+      <label for="number">New Weight: </label>
+      <input id="newInfo" type="text" name="weight"/>
+      <input type="submit" value="Edit" />
+    </form>
   </section>
   <section id="content">
   </section>
