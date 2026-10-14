@@ -39,12 +39,9 @@
       content.innerHTML += `<p>Status:${response.status}</p>`;
       content.innerHTML += `<p>Content-Length:${response.headers.get('Content-Length')}</p>`;
 
-      console.log(response);
       if(parseResponse) {
-        console.log('literally what is happening');
         const obj = await response.json();
         const jsonString = JSON.stringify(obj);
-        console.log(jsonString);
         content.innerHTML += `<p>${jsonString}</p>`;
       } else {
       }
@@ -84,7 +81,6 @@
       const input = searchForm.querySelector('#inputField').value;
       const method = searchForm.querySelector('#methodSelect').value;
       const url = urlStart.concat(input);
-      console.log(url);
       
       let response = await fetch(url, {
         method,

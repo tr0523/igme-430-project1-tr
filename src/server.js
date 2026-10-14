@@ -1,10 +1,6 @@
 const http = require('http');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
-const pokedexSource = require('./pokedex.json');
-
-const pokedexString = JSON.stringify(pokedexSource);
-var pokedex = JSON.parse(pokedexString);
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -30,9 +26,8 @@ const parseBody = (request, response, handler) => {
         //From here to the next * is code found on the reference guide for parsing a POST body
         //Specifically at https://github.com/IGM-RichMedia-at-RIT/igme-430-shared/blob/main/reference/http/parsing-post-body.md
         const type = request.headers['content-type'];
-        console.log(type);
         if (type === 'application/x-www-form-urlencoded') {
-            request.body = query.parse(bodyString);
+            request.body = request.query.parse(bodyString);
         } else if (type === 'application/json') {
             request.body = JSON.parse(bodyString);
         } else {
@@ -77,7 +72,6 @@ const onRequest = (request, response) => {
             jsonHandler.getByType(request, response);
             break;
         case '/getByNumber':
-            console.log('???????????????????????');
             jsonHandler.getByNumber(request, response);
             break;
         case '/getByWeakness':

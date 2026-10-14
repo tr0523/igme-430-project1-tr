@@ -28,9 +28,8 @@ const respondJSON = (request, response, status, object) => {
 
 //Retrieves a pokemon based on the name input
 const getByName = (request, response) => {
-    correctID = -1;
-    currentStatus = 204;
-    responseJSON = {
+    let currentStatus = 204;
+    let responseJSON = {
         message: 'Pokemon not found by that name in API',
         id: 'noResults',
     };
@@ -48,8 +47,8 @@ const getByName = (request, response) => {
 
 //Retrieves the pokemon with the type input
 const getByType = (request, response) => {
-    correctPokemon = {};
-    correctNum = 0
+    let correctPokemon = {};
+    let correctNum = 0
 
     pokedex.forEach(pokemon => {
         pokemon.type.forEach(type => {
@@ -77,16 +76,20 @@ const getByType = (request, response) => {
 //Retrieves a pokemon based on the number input
 const getByNumber = (request, response) => {
     if(!pokedex[request.query.number-1]){
-        const responseJSON = {
-            message: 'Pokemon not found by that number in API',
-            id: 'noResults',
-        };
-
-        return respondJSON(request, response, 204, responseJSON);
+        if(request.query.number == ""){
+            return userError(request,response);
+        }
+        else{
+            const responseJSON = {
+                message: 'Pokemon not found by that number in API',
+                id: 'noResults',
+            };
+            return respondJSON(request, response, 204, responseJSON);
+        }
     }
     else{
 
-    pokemon = pokedex[request.query.number-1];
+    const pokemon = pokedex[request.query.number-1];
     const responseJSON = pokemon;   
     return respondJSON(request, response, 200, responseJSON);
     }
@@ -94,8 +97,8 @@ const getByNumber = (request, response) => {
 
 //Retrieves the pokemon with the weakness input
 const getByWeakness = (request, response) => {
-    correctPokemon = {};
-    correctNum = 0
+    let correctPokemon = {};
+    let correctNum = 0
 
     pokedex.forEach(pokemon => {
         pokemon.weaknesses.forEach(weakness => {
@@ -126,16 +129,21 @@ const getByWeakness = (request, response) => {
 const updateHeight = (request, response) => {
     const { inputField, newInfo } = request.body;
     if(!pokedex[inputField-1]){
-        const responseJSON = {
-            message: 'Pokemon not found by that number in API',
-            id: 'noResults',
-        };
-        return respondJSON(request, response, 204, responseJSON);
+        if(inputField == ""){
+            return userError(request,response);
+        }
+        else{
+            const responseJSON = {
+                message: 'Pokemon not found by that number in API',
+                id: 'noResults',
+            };
+            return respondJSON(request, response, 204, responseJSON);
+        }
     }
     else{
 
     pokedex[inputField-1].height = newInfo;
-    pokemon = pokedex[inputField-1];
+    const pokemon = pokedex[inputField-1];
 
     const responseJSON = pokemon;   
     return respondJSON(request, response, 200, responseJSON);
@@ -146,16 +154,21 @@ const updateHeight = (request, response) => {
 const updateWeight = (request, response) => {
     const { inputField, newInfo } = request.body;
     if(!pokedex[inputField-1]){
-        const responseJSON = {
-            message: 'Pokemon not found by that number in API',
-            id: 'noResults',
-        };
-        return respondJSON(request, response, 204, responseJSON);
+        if(inputField == ""){
+            return userError(request,response);
+        }
+        else{
+            const responseJSON = {
+                message: 'Pokemon not found by that number in API',
+                id: 'noResults',
+            };
+            return respondJSON(request, response, 204, responseJSON);
+        }
     }
     else{
 
     pokedex[inputField-1].weight = newInfo;
-    pokemon = pokedex[inputField-1];
+    const pokemon = pokedex[inputField-1];
 
     const responseJSON = pokemon;   
     return respondJSON(request, response, 200, responseJSON);
@@ -163,8 +176,6 @@ const updateWeight = (request, response) => {
 };
 
 //Returns an error for if not all parameters are input
-//Current assumption is that blank answers are input, and searches that do not yield results with content,
-//So they use 204 errors
 const userError = (request, response) => {
     const responseJSON = {
         message: 'Required parameters are missing',
